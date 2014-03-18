@@ -1,0 +1,49 @@
+package com.xgteam.socialapp;
+
+
+
+import com.xgteam.model.User;
+
+import android.app.Fragment;
+import android.os.Bundle;
+import android.view.LayoutInflater;
+import android.view.View;
+import android.view.ViewGroup;
+
+import android.widget.TextView;
+
+public class HomeFragment extends Fragment {
+	
+	public HomeFragment(){}
+	
+	@Override
+    public View onCreateView(LayoutInflater inflater, ViewGroup container,
+            Bundle savedInstanceState) {
+        
+		View rootView = inflater.inflate(R.layout.fragment_home, container, false);
+		
+		//ImageView userPicture = (ImageView)rootView.findViewById(R.id.profilePicture);
+		TextView userName = (TextView)rootView.findViewById(R.id.userName);
+		TextView userOnlineState=(TextView)rootView.findViewById(R.id.userOnlineState);
+		//Button userFriends=(Button)rootView.findViewById(R.id.userFriendsButton);
+		//Button userGroups=(Button)rootView.findViewById(R.id.userGroupsButton);
+		//Button userPictures=(Button)rootView.findViewById(R.id.userPicturesButton);
+		//Spinner userGroups=(Spinner)rootView.findViewById(R.id.userGroupsSpinner);
+		//Spinner userPictures=(Spinner)rootView.findViewById(R.id.userPicturesSpinner);
+		
+		User user=new User();
+        try {
+			user.signin("xgteam.dev@gmail.com", "cybershtein");
+			userName.setText(user.getFirstName()+" "+user.getLastName());
+	        userOnlineState.setText(user.getLastName());
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+        
+        //userFriends.setText("Friends \n "+user.getFriends().size());
+        //userGroups.setText("Groups \n "+user.getGroups().size());
+        //userPictures.setText("Pictures \n "+user.getPictures().size());
+        return rootView;
+    }
+}

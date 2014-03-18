@@ -1,0 +1,113 @@
+package com.xgteam.socialapp;
+
+
+
+import java.util.List;
+
+import org.w3c.dom.Text;
+
+import com.xgteam.model.*;
+import com.xgteam.utils.DownloadImageTask;
+
+import android.app.Activity;
+import android.app.Fragment;
+import android.content.Intent;
+import android.os.Bundle;
+import android.support.v4.app.ActivityCompat;
+import android.support.v4.app.FragmentActivity;
+import android.util.LayoutDirection;
+import android.view.LayoutInflater;
+import android.view.View;
+import android.view.ViewGroup;
+import android.view.ViewGroup.LayoutParams;
+
+import android.widget.Button;
+import android.widget.ImageView;
+import android.widget.LinearLayout;
+import android.widget.TextView;
+
+public class HomeFragment extends Fragment {
+	
+	public HomeFragment(){}
+	
+	@SuppressWarnings("unused")
+	@Override
+    public View onCreateView(LayoutInflater inflater, ViewGroup container,
+            Bundle savedInstanceState) {
+        
+		View rootView = inflater.inflate(R.layout.fragment_home, container, false);
+		
+		ImageView userPicture = (ImageView)rootView.findViewById(R.id.profilePicture);
+		TextView userName = (TextView)rootView.findViewById(R.id.userName);
+		TextView userOnlineState=(TextView)rootView.findViewById(R.id.userOnlineState);
+		Button userFriends=(Button)rootView.findViewById(R.id.userFriendsButton);
+		Button userGroups=(Button)rootView.findViewById(R.id.userGroupsButton);
+		Button userPictures=(Button)rootView.findViewById(R.id.userPicturesButton);
+		
+		User user=new User();
+        try {
+			user.signin("xgteam.dev@gmail.com", "cybershtein");
+			userName.setText(user.getFirstName()+" "+user.getLastName());
+			if(user.getOnlineState()){
+				userOnlineState.setText("Online");
+			}
+			else{
+				userOnlineState.setText("Offline");
+			}
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+        
+        Friend friend=new Friend();
+        try {
+			List<FriendItem> friends=friend.get();
+			userFriends.setText("Friends \n "+friends.size());
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+        
+        Group group=new Group();
+        try {
+			List<GroupItem> groups=group.get();
+			userGroups.setText("Groups \n "+groups.size());
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+        
+        userPictures.setText("Pictures \n 3");
+        
+        userFriends.setOnClickListener(new View.OnClickListener() {
+            public void onClick(View v) {
+            	//MainActivity.this.displayView(1);
+            	//MainActivity mac=new MainActivity();
+            	//mac.displayView(1);
+            }
+        });
+        new DownloadImageTask(userPicture).execute(user.getPicture());
+        
+        
+        /*LinearLayout ll = (LinearLayout)rootView.findViewById(R.id.wallVertLayout);
+        
+        LinearLayout wallPost=new LinearLayout(this.getActivity());
+        wallPost.setLayoutParams(new LayoutParams(LayoutParams.MATCH_PARENT, LayoutParams.WRAP_CONTENT));        
+        
+        ImageView pict=new ImageView(this.getActivity());
+        new DownloadImageTask(pict).execute("https://pp.vk.me/c320531/v320531750/2570/0PFIvRp2aho.jpg");
+        
+        pict.setScaleX((float) 0.2);
+        pict.setScaleY((float) 0.2);
+        pict.setPadding(0, 10, 0, 0);
+        wallPost.addView(pict);
+        
+        TextView author=new TextView(this.getActivity());
+        author.setText("Andrew Dubytsky");
+        wallPost.addView(author);
+        
+        ll.addView(wallPost);*/
+        
+        return rootView;
+    }
+}
